@@ -6,7 +6,7 @@
  * Version:             0.1.0
  * Requires at least:   6.3
  * Requires PHP:        7.4
- * Author:              Nick Diego
+ * Author:              Ryan Edwards
  * Author URI:          https://github.com/rynokins
  * License:             GPLv2
  * License URI:         https://www.gnu.org/licenses/old-licenses/gpl-2.0.html
