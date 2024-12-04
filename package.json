@@ -1,29 +1,35 @@
 {
-  "name": "enable-button-icons",
+  "name": "enable-core-button-icons",
   "version": "0.1.0",
-  "description": "Easily add icons to Button blocks.",
-  "author": "Nick Diego",
+  "description": "Easily add Feather icons to core Button blocks.",
+  "author": "Ryan Edwards",
   "license": "GPL-2.0-or-later",
   "repository": {
     "type": "git",
-    "url": "git://github.com/ndiego/enable-button-icons.git"
+    "url": "git@github.com:rynokins/enable-core-button-icons.git"
   },
   "scripts": {
-    "build": "wp-scripts build",
+    "build": "npm run encode-icons && wp-scripts build",
     "lint:css": "wp-scripts lint-style",
     "lint:js": "wp-scripts lint-js",
     "lint:js:src": "wp-scripts lint-js ./src",
     "lint:js:src:fix": "wp-scripts lint-js ./src --fix",
-    "start": "wp-scripts start",
+    "start": "npm run encode-icons && wp-scripts start",
     "packages-update": "wp-scripts packages-update",
-    "update-pot": "wp i18n make-pot . languages/enable-button-icons.pot --exclude=src",
-    "plugin-zip": "wp-scripts plugin-zip"
+    "update-pot": "wp i18n make-pot . languages/enable-core-button-icons.pot --exclude=src",
+    "plugin-zip": "wp-scripts plugin-zip",
+		"encode-icons": "node scripts/set-icon-vars.js"
   },
   "dependencies": {
-    "classnames": "^2.3.2"
+		"@wordpress/block-editor": "^14.8.0",
+		"@wordpress/components": "^28.13.0",
+		"feather-icons": "^4.29.2",
+		"prop-types": "^15.8.1",
+		"classnames": "^2.5.1",
+		"fuse.js": "^7.0.0",
+		"htmr": "^1.0.2"
   },
   "devDependencies": {
-    "@wordpress/icons": "^9.35.0",
     "@wordpress/scripts": "^26.15.0",
     "webpack-remove-empty-scripts": "^0.8.4"
   }

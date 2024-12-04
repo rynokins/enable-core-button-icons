@@ -2,157 +2,31 @@
  * External dependencies
  */
 import classnames from 'classnames';
-
+import React from 'react';
+import htmr from 'htmr';
+import { icons } from 'feather-icons';
 /**
  * WordPress dependencies
  */
 import { __ } from '@wordpress/i18n';
 import { addFilter } from '@wordpress/hooks';
+import { useState } from '@wordpress/element';
 import { InspectorControls } from '@wordpress/block-editor';
 import {
 	Button,
 	PanelBody,
 	PanelRow,
 	ToggleControl,
+  SearchControl,
+  __experimentalScrollable as Scrollable, // eslint-disable-line
 	__experimentalGrid as Grid, // eslint-disable-line
 } from '@wordpress/components';
-import {
-	arrowRight,
-	arrowLeft,
-	chevronLeft,
-	chevronLeftSmall,
-	chevronRight,
-	chevronRightSmall,
-	cloud,
-	cloudUpload,
-	commentAuthorAvatar,
-	download,
-	external,
-	help,
-	info,
-	lockOutline,
-	login,
-	next,
-	previous,
-	shuffle,
-	wordpress,
-} from '@wordpress/icons';
-
 /**
- * All available icons.
- * (Order determines presentation order)
+ * Internal dependencies
  */
-export const ICONS = [
-	{
-		label: __( 'Chevron Right', 'enable-button-icons' ),
-		value: 'chevron-right',
-		icon: chevronRight,
-	},
-	{
-		label: __( 'Chevron Left', 'enable-button-icons' ),
-		value: 'chevron-left',
-		icon: chevronLeft,
-	},
-	{
-		label: __( 'Chevron Right (Small)', 'enable-button-icons' ),
-		value: 'chevron-right-small',
-		icon: chevronRightSmall,
-	},
-	{
-		label: __( 'Chevron Left (Small)', 'enable-button-icons' ),
-		value: 'chevron-left-small',
-		icon: chevronLeftSmall,
-	},
-	{
-		label: __( 'Shuffle', 'enable-button-icons' ),
-		value: 'shuffle',
-		icon: shuffle,
-	},
-	{
-		label: __( 'Arrow Right', 'enable-button-icons' ),
-		value: 'arrow-right',
-		icon: arrowRight,
-	},
-	{
-		label: __( 'Arrow Left', 'enable-button-icons' ),
-		value: 'arrow-left',
-		icon: arrowLeft,
-	},
-	{
-		label: __( 'Next', 'enable-button-icons' ),
-		value: 'next',
-		icon: next,
-	},
-	{
-		label: __( 'Previous', 'enable-button-icons' ),
-		value: 'previous',
-		icon: previous,
-	},
-	{
-		label: __( 'Download', 'enable-button-icons' ),
-		value: 'download',
-		icon: download,
-	},
-	{
-		label: __( 'External Arrow', 'enable-button-icons' ),
-		value: 'external-arrow',
-		icon: (
-			<svg
-				width="24"
-				height="24"
-				viewBox="0 0 24 24"
-				xmlns="http://www.w3.org/2000/svg"
-			>
-				<polygon points="18 6 8.15240328 6 8.15240328 8.1101993 14.3985932 8.1101993 6 16.5087925 7.4912075 18 15.8898007 9.6014068 15.8898007 15.8475967 18 15.8475967"></polygon>
-			</svg>
-		),
-	},
-	{
-		label: __( 'External', 'enable-button-icons' ),
-		value: 'external',
-		icon: external,
-	},
-	{
-		label: __( 'Login', 'enable-button-icons' ),
-		value: 'login',
-		icon: login,
-	},
-	{
-		label: __( 'Lock', 'enable-button-icons' ),
-		value: 'lock-outline',
-		icon: lockOutline,
-	},
-	{
-		label: __( 'Avatar', 'enable-button-icons' ),
-		value: 'comment-author-avatar',
-		icon: commentAuthorAvatar,
-	},
-	{
-		label: __( 'Cloud', 'enable-button-icons' ),
-		value: 'cloud',
-		icon: cloud,
-	},
-	{
-		label: __( 'Cloud Upload', 'enable-button-icons' ),
-		value: 'cloud-upload',
-		icon: cloudUpload,
-	},
-	{
-		label: __( 'Help', 'enable-button-icons' ),
-		value: 'help',
-		icon: help,
-	},
-	{
-		label: __( 'Info', 'enable-button-icons' ),
-		value: 'info',
-		icon: info,
-	},
-	{
-		label: __( 'WordPress', 'enable-button-icons' ),
-		value: 'wordpress',
-		icon: wordpress,
-	},
-];
+import ICONS from './assets';
+import useSearch from './useSearch';
+
 
 /**
  * Add the attributes needed for button icons.
@@ -174,13 +48,17 @@ function addAttributes( settings ) {
 			type: 'boolean',
 			default: false,
 		},
+		emptyContent: {
+			type: 'boolean',
+			default: false,
+		},
 	};
 
 	const newSettings = {
 		...settings,
 		attributes: {
 			...settings.attributes,
-			...iconAttributes,
+			...iconAttributes
 		},
 	};
 
@@ -189,7 +67,7 @@ function addAttributes( settings ) {
 
 addFilter(
 	'blocks.registerBlockType',
-	'enable-button-icons/add-attributes',
+	'core-button-icons/add-attributes',
 	addAttributes
 );
 
@@ -206,56 +84,106 @@ function addInspectorControls( BlockEdit ) {
 		}
 
 		const { attributes, setAttributes } = props;
-		const { icon: currentIcon, iconPositionLeft } = attributes;
+		const {
+      icon: currentIcon, iconPositionLeft, emptyContent } = attributes;
+
+		const inputElement = React.useRef(null)
+		const [ query, setQuery ] = useState( '' )
+
+
+		const results = useSearch(query || '')
 
 		return (
 			<>
 				<BlockEdit { ...props } />
 				<InspectorControls>
 					<PanelBody
-						title={ __( 'Icon settings', 'enable-button-icons' ) }
+						title={ __( 'Button Icons', 'core-button-icons' ) }
 						className="button-icon-picker"
 						initialOpen={ true }
 					>
 						<PanelRow>
-							<Grid
-								className="button-icon-picker__grid"
-								columns="5"
-								gap="0"
-							>
-								{ ICONS.map( ( icon, index ) => (
-									<Button
-										key={ index }
-										label={ icon?.label }
-										isPressed={ currentIcon === icon.value }
-										className="button-icon-picker__button"
-										onClick={ () =>
-											setAttributes( {
-												// Allow user to disable icons.
-												icon:
-													currentIcon === icon.value
-														? null
-														: icon.value,
-											} )
-										}
-									>
-										{ icon.icon ?? icon.value }
-									</Button>
-								) ) }
-							</Grid>
+              <SearchControl
+								ref={inputElement}
+                __nextHasNoMarginBottom
+								placeholder={`Search ${
+									Object.keys(ICONS).length
+								} icons…`}
+								value={query || ''}
+								onChange={setQuery}
+								size='compact'
+              />
 						</PanelRow>
 						<PanelRow>
+
+              <Scrollable
+                scrollDirection="y"
+                style={{
+                  height: 400
+                }}
+              >
+								{results.length > 0 ? (
+									<Grid
+										className="button-icon-picker__grid"
+										columns="5"
+										gap="0"
+									>
+										{ results.map( ( icon, index ) => (
+
+											<Button
+												key={ index }
+												label={ icon?.label }
+												isPressed={ currentIcon === icon.value }
+												className="button-icon-picker__button"
+												onClick={ () =>
+													setAttributes( {
+														// Allow user to disable icons.
+														icon:
+															currentIcon === icon.value
+																? null
+																: icon.value,
+													} )
+												}
+											>
+												{ icon.icon ?? icon.value }
+											</Button>
+										) ) }
+									</Grid>
+								) : (
+									<div class="button-icon-picker__grid no-results">{htmr(icons['alert-triangle'].toSvg({'width':32,'height':32}))}<h2>No results found for &ldquo;{query}&rdquo;</h2></div>
+								)}
+              </Scrollable>
+						</PanelRow>
+						<PanelRow className='button-icon-options__row'>
 							<ToggleControl
 								label={ __(
-									'Show icon on left',
-									'enable-button-icons'
+									'Icon on left',
+									'core-button-icons'
 								) }
 								checked={ iconPositionLeft }
+								disabled={ emptyContent }
 								onChange={ () => {
 									setAttributes( {
 										iconPositionLeft: ! iconPositionLeft,
 									} );
 								} }
+							/>
+							<ToggleControl
+								label={ __(
+									'Icon only',
+									'core-button-icons'
+								) }
+								checked={ emptyContent }
+								onChange={ () => {
+									setAttributes( {
+										emptyContent: ! emptyContent,
+										text: emptyContent
+										? undefined
+										: '&#32;'
+									} )
+                  console.log(props.attributes);
+                }
+                }
 							/>
 						</PanelRow>
 					</PanelBody>
@@ -267,7 +195,7 @@ function addInspectorControls( BlockEdit ) {
 
 addFilter(
 	'editor.BlockEdit',
-	'enable-button-icons/add-inspector-controls',
+	'core-button-icons/add-inspector-controls',
 	addInspectorControls
 );
 
@@ -282,12 +210,13 @@ function addClasses( BlockListBlock ) {
 		const { name, attributes } = props;
 
 		if ( 'core/button' !== name || ! attributes?.icon ) {
-			return <BlockListBlock { ...props } />;
+      return <BlockListBlock { ...props } />;
 		}
 
 		const classes = classnames( props?.className, {
 			[ `has-icon__${ attributes?.icon }` ]: attributes?.icon,
 			'has-icon-position__left': attributes?.iconPositionLeft,
+			'is-icon-only': attributes?.emptyContent,
 		} );
 
 		return <BlockListBlock { ...props } className={ classes } />;
@@ -296,6 +225,6 @@ function addClasses( BlockListBlock ) {
 
 addFilter(
 	'editor.BlockListBlock',
-	'enable-button-icons/add-classes',
+	'core-button-icons/add-classes',
 	addClasses
 );
