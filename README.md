@@ -17,8 +17,8 @@ This example plugin serves to demonstrate how you can extend core WordPress bloc
 ## Installation
 
 1. Clone this repo into your WordPress plugins directory.
-2. run `pnpm install` to install dependencies.
-3. run `pnpm build` to build the plugin.
+2. run `npm install` to install dependencies.
+3. run `npm build` to build the plugin.
 4. Activate the plugin in your WordPress admin.
 
 ### To-do
