@@ -1,6 +1,6 @@
 # Enable Core Button Icons
 
-[![Playground Demo Link](https://img.shields.io/badge/Playground_Demo-v0.1.0-blue?logo=wordpress&logoColor=%23fff&labelColor=%233858e9&color=%233858e9)](https://playground.wordpress.net/?blueprint-url=https://raw.githubusercontent.com/ndiego/enable-core-button-icons/main/_playground/blueprint-github.json)
+[![Playground Demo Link](https://img.shields.io/badge/Playground_Demo-v0.1.0-blue?logo=wordpress&logoColor=%23fff&labelColor=%233858e9&color=%233858e9)](https://playground.wordpress.net/?blueprint-url=https://raw.githubusercontent.com/rynokins/enable-core-button-icons/main/_playground/blueprint-github.json)
 
 Easily add [Feather](https://github.com/feathericons/feather) icons to core Button blocks in WordPress.
 
