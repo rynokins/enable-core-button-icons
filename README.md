@@ -13,6 +13,8 @@ This example plugin serves to demonstrate how you can extend core WordPress bloc
 - Wraps the icon grid in a Scrollable component.
 - Adds a fuzzy-search field using the tags info from Feather, cribbed from the [feathericons.com](https://github.com/feathericons/feathericons.com) repo
 - Adds an "Icon only" toggle
+- Icons are referenced on the front end from the Feather Icons svg sprite, like so: `<svg xmlns="http://www.w3.org/2000/svg" class="wp-block-button__link-icon"><use xlink:href="#zoom-in"></use></svg>`
+- Adds a service worker to preload the Feather icon sprite on the front end, so the icons are all loaded just once.
 
 ## Installation
 
