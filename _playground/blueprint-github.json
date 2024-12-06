@@ -7,6 +7,11 @@
 	},
 	"steps": [
 		{
+			"step": "login",
+			"username": "admin",
+			"password": "password"
+		},
+		{
 			"step": "updateUserMeta",
 			"meta": {
 				"admin_color": "modern",
@@ -17,14 +22,14 @@
 		{
 			"step": "setSiteOptions",
 			"options": {
-				"blogname": "Enable Button Icons"
+				"blogname": "Enable Core Button Icons"
 			}
 		},
 		{
 			"step": "installPlugin",
 			"pluginZipFile": {
 				"resource": "url",
-				"url": "https://github-proxy.com/proxy/?repo=ndiego/enable-core-button-icons&branch=main"
+				"url": "https://github-proxy.com/proxy/?repo=rynokins/enable-core-button-icons&branch=main"
 			}
 		},
 		{
@@ -32,13 +37,6 @@
 			"themeZipFile": {
 				"resource": "wordpress.org/themes",
 				"slug": "twentytwentyfour"
-			}
-		},
-		{
-			"step": "importWxr",
-			"file": {
-				"resource": "url",
-				"url": "https://raw.githubusercontent.com/ndiego/enable-core-button-icons/main/_playground/demo-content.xml"
 			}
 		}
 	]
