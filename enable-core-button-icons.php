@@ -6,7 +6,7 @@
  * Version:             0.1.0
  * Requires at least:   6.3
  * Requires PHP:        7.4
- * Author:              Ryan Edwards
+ * Author:              Ryan Edwards (forked from https://github.com/ndiego/enable-button-icons)
  * Author URI:          https://github.com/rynokins
  * License:             GPLv2
  * License URI:         https://www.gnu.org/licenses/old-licenses/gpl-2.0.html
@@ -18,12 +18,11 @@
 
 defined( 'ABSPATH' ) || exit;
 
-use WP_HTML_Tag_Processor;
-
 /**
  * Enqueue Editor scripts and styles.
  */
-function enable_button_icons_enqueue_block_editor_assets() {
+function enable_button_icons_enqueue_block_editor_assets()
+{
 	$asset_file  = include plugin_dir_path( __FILE__ ) . 'build/index.asset.php';
 
 	wp_enqueue_script(
@@ -44,7 +43,8 @@ add_action( 'enqueue_block_editor_assets', 'enable_button_icons_enqueue_block_ed
 /**
  * Enqueue block Editor styles
  */
-function enqueue_button_icons_block_editor_styles() {
+function enqueue_button_icons_block_editor_styles()
+{
 	wp_enqueue_style(
 		'enable-core-button-icons-editor-styles',
 		plugin_dir_url( __FILE__ ) . 'build/editor.css'
@@ -56,37 +56,57 @@ add_action( 'admin_enqueue_scripts', 'enqueue_button_icons_block_editor_styles' 
  * Enqueue block styles
  * (Applies to both frontend and Editor)
  */
-function enable_button_icons_block_styles() {
-	wp_enqueue_block_style(
-		'core/button',
-		array(
-			'handle' => 'enable-core-button-icons-block-styles',
-			'src'    => plugin_dir_url( __FILE__ ) . 'build/style.css',
-			'ver'    => wp_get_theme()->get( 'Version' ),
-			'path'   => plugin_dir_path( __FILE__ ) . 'build/style.css',
-		)
-	);
+function enable_button_icons_block_styles()
+{
+	wp_enqueue_block_style( 'core/button', [
+		'handle' => 'enable-core-button-icons-block-styles',
+		'src'    => plugin_dir_url( __FILE__ ) . 'build/style.css',
+		'ver'    => wp_get_theme()->get( 'Version' ),
+		'path'   => plugin_dir_path( __FILE__ ) . 'build/style.css',
+	]);
 }
 add_action( 'init', 'enable_button_icons_block_styles' );
 
 /**
- * Load feather-icons svg after body open
-	*/
-function embed_feather_icons_svg() {
-	if ( is_admin() ) return;
+ * Preload assets
+ */
+function preload_core_button_icons_assets()
+{
+	// Loader
+	echo '<link rel="modulepreload" href="' . plugin_dir_url( __FILE__ ) . 'enable-core-button-icons-svg-loader.js' . '" />';
 
-	echo '<span class="feather-icon-library">' . file_get_contents( get_template_directory_uri() . '/node_modules/feather-icons/dist/feather-sprite.svg' ) . '</span>';
+	// Fetch worker
+	echo '<link rel="modulepreload" href="' . plugin_dir_url( __FILE__ ) . 'fetchWorker.js' . '" />';
 
+	// SVG sprite
+	echo '<link rel="preload" href="' . plugin_dir_path( __FILE__ ) .'node_modules/feather-icons/dist/feather-sprite.svg";' . '" as="image" />';
+};
+add_action('wp_head', 'preload_core_button_icons_assets');
+
+
+/**
+ * Enqueue block styles
+ * (Applies to both frontend and Editor)
+ */
+function enable_button_icons_svg_loader()
+{
+	// use asset file's version number
+	$asset_file  = include plugin_dir_path( __FILE__ ) . 'build/index.asset.php';
+
+	wp_enqueue_script_module(
+		'enable-button-icons-svg-loader',
+		plugin_dir_url( __FILE__ ) . 'enable-core-button-icons-svg-loader.js', [],
+		$asset_file['version']
+	);
 }
-add_action( 'wp_body_open', 'embed_feather_icons_svg' );
+add_action( 'wp_enqueue_scripts', 'enable_button_icons_svg_loader' );
 
 /**
  * Render icons on the frontend.
  */
-function enable_button_icons_render_block_button( $block_content, $block ) {
-	if ( ! isset( $block['attrs']['icon'] ) ) {
-		return $block_content;
-	}
+function enable_button_icons_render_block_button( $block_content, $block )
+{
+	if ( ! isset( $block['attrs']['icon'] ) ) return $block_content;
 
 	$icon         = $block['attrs']['icon'];
 	$positionLeft = isset( $block['attrs']['iconPositionLeft'] ) ? $block['attrs']['iconPositionLeft'] : false;
