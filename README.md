@@ -18,7 +18,7 @@ This example plugin serves to demonstrate how you can extend core WordPress bloc
 
 ## Installation
 
-Download a zip with the latest release from the [releases page](https://github.com/redwards510/enable-core-button-icons/releases), pre-built and bundled with the Feather Icons library.
+Download a zip with the latest release from the [releases page](https://github.com/rynokins/enable-core-button-icons/releases/tag/v0.1.0-beta), pre-built and bundled with the Feather Icons library.
 
 Or, if you want to build it yourself:
 
@@ -28,5 +28,5 @@ Or, if you want to build it yourself:
 4. Activate the plugin in your WordPress admin.
 
 ### To-do
-- [ ] Store any text entered into buttons upon "Icon only" toggle.
+- [ ] Store any text entered into buttons upon "Icon only" toggle, so it can be replaced after "Icon only" is toggled off.
 - [ ] Figure out how to get front end enqueues to work in Playground. _(Playground link removed for now)_
