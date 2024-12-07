@@ -18,7 +18,9 @@ This example plugin serves to demonstrate how you can extend core WordPress bloc
 
 ## Installation
 
-Download a zip with the latest releasefrom the [releases page](https://github.com/redwards510/enable-core-button-icons/releases), pre-built and bundled with the Feather Icons library.
+Download a zip with the latest release from the [releases page](https://github.com/redwards510/enable-core-button-icons/releases), pre-built and bundled with the Feather Icons library.
+
+Or, if you want to build it yourself:
 
 1. Clone this repo into your WordPress plugins directory.
 2. run `npm install` to install dependencies.
