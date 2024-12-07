@@ -14,6 +14,11 @@
       stroke-linejoin: round;
     }
   }
+  &.is-icon-only {
+    .wp-block-button__link {
+      gap: 0;
+    }
+  }
 }
 .feather-icon-library {
   display: none;

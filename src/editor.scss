@@ -48,7 +48,8 @@ $chevron-right: map.get(icons.$icon_content, 'chevron-right');
   .wp-block-button__link {
     &:after {
       content: '';
-  }
+      margin-inline-start: 0.5rem;
+    }
     // Styles the icon.
     &:after, &:before {
       display: inline-block;
@@ -69,22 +70,25 @@ $chevron-right: map.get(icons.$icon_content, 'chevron-right');
     .wp-block-button__link {
       gap: 0;
       padding: calc(0.667em + 3px) calc(1.333em + 2px);
-      span[data-rich-text-placeholder] {
-        display: none;
+      letter-spacing: -10px;
+      user-select: none;
+      &:after, &:before {
+        margin-inline: 0;
       }
     }
   }
 
   &.has-icon-position__left {
-      .wp-block-button__link {
-          &::after {
-              content: none;
-          }
-
-          &::before {
-              content: '';
-          }
+    .wp-block-button__link {
+      &::after {
+        content: none;
       }
+
+      &::before {
+        content: '';
+        margin-inline-end: 0.5rem;
+      }
+    }
   }
 }
 .wp-block-button {

@@ -110,11 +110,15 @@ function enable_button_icons_render_block_button( $block_content, $block )
 
 	$icon         = $block['attrs']['icon'];
 	$positionLeft = isset( $block['attrs']['iconPositionLeft'] ) ? $block['attrs']['iconPositionLeft'] : false;
+	$iconOnly = isset( $block['attrs']['emptyContent'] ) ? 'is-icon-only' : '';
+
 
 	// Append the icon class to the block.
 	$p = new WP_HTML_Tag_Processor( $block_content );
 	if ( $p->next_tag() ) {
 		$p->add_class( 'has-icon__' . $icon );
+		$p->add_class( $iconOnly );
+
 	}
 	$block_content = $p->get_updated_html();
 
